@@ -1,6 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+
+import 'Calculepage.dart';
 
 
 
@@ -20,12 +21,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final randomFullName = generateRandomFullName();    return Scaffold(
+    final randomFullName = generateRandomFullName();
+    return Scaffold(
         appBar: AppBar(
           title: Text("Hellow Guys"),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(18.0),
           child: Container(
             width: double.infinity,
             color: const Color.fromARGB(255, 188, 239, 239),
@@ -55,7 +57,10 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  ElevatedButton(onPressed: () {}, child: const Text("Go"))
+                  ElevatedButton(onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> Calculepage()));
+
+                  }, child: const Text("Go"))
                 ],
               ),
             ),
