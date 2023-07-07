@@ -40,6 +40,7 @@ class HomePage extends StatelessWidget {
                         " $randomFullName",
                         style: const TextStyle(
                           fontSize: 20,
+                          decoration:TextDecoration.underline,
                         ),
                       ),
                       const SizedBox(
