@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projer/Activities/Resultpage.dart';
 
 class Calculepage extends StatefulWidget {
   const Calculepage({super.key});
@@ -25,25 +26,6 @@ class CalculePagerState extends State<Calculepage> {
   }
 
 
-  //method to check the state of the textfield
-  void calculate() {
-    String firstNumber = firstNumberController.text;
-    String secondNumber = secondNumberController.text;
-
-    if (firstNumber.isEmpty || secondNumber.isEmpty) {
-      showAlertDialog('Error', 'Please enter values in both fields.');
-      return;
-    }
-
-    if (!_isInteger(firstNumber) || !_isInteger(secondNumber)) {
-      showAlertDialog('Error', 'Please enter integer values only.');
-      return;
-    }
-
-    // Perform calculation here using the selected operation and the entered numbers
-  }
-
-  // using this boolean in the method above
   bool _isInteger(String value) {
     if (value.isEmpty) return false;
 
@@ -52,12 +34,9 @@ class CalculePagerState extends State<Calculepage> {
     return number != null;
   }
 
-
-  // make the alert dialogue unavoidabale
   void showAlertDialog(String title, String message) {
     showDialog(
       context: context,
-      barrierDismissible: false, // Dialog cannot be dismissed by tapping outside or pressing the back button
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
@@ -94,8 +73,7 @@ class CalculePagerState extends State<Calculepage> {
                 children: [
                   TextField(
                     controller: firstNumberController,
-                    decoration:
-                        InputDecoration(hintText: "Enter the first number"),
+                    decoration: InputDecoration(hintText: "Enter the first number"),
                   ),
                   RadioListTile(
                     value: 1,
@@ -117,15 +95,34 @@ class CalculePagerState extends State<Calculepage> {
                   ),
                   TextField(
                     controller: secondNumberController,
-                    decoration:
-                        InputDecoration(hintText: "Enter the second number"),
+                    decoration: InputDecoration(hintText: "Enter the second number"),
                   ),
                   ElevatedButton(
-                    onPressed: calculate,
+                    onPressed: () {
+                      String firstNumber = firstNumberController.text;
+                      String secondNumber = secondNumberController.text;
+
+                      if (firstNumber.isEmpty || secondNumber.isEmpty) {
+                        showAlertDialog('Error', 'fields are empty try again!!!');
+                        return;
+                      }
+
+                      if (!_isInteger(firstNumber) || !_isInteger(secondNumber)) {
+                        showAlertDialog('Error', 'Sorry only Integers ');
+                        return;
+                      }
+
+                      // Perform calculation here using the selected operation and the entered numbers
+
+                      // Navigate to ResultPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ResultPage()),
+                      );
+                    },
                     child: Text("Calculer"),
                     style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.cyan),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
                     ),
                   ),
                 ],
