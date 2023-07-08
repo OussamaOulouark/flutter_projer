@@ -9,6 +9,8 @@ class Calculepage extends StatefulWidget {
 
 class CalculePagerState extends State<Calculepage> {
   late int selectedRadioValue;
+  TextEditingController firstNumberController = TextEditingController();
+  TextEditingController secondNumberController = TextEditingController();
 
   @override
   void initState() {
@@ -20,6 +22,57 @@ class CalculePagerState extends State<Calculepage> {
     setState(() {
       selectedRadioValue = value;
     });
+  }
+
+
+  //method to check the state of the textfield
+  void calculate() {
+    String firstNumber = firstNumberController.text;
+    String secondNumber = secondNumberController.text;
+
+    if (firstNumber.isEmpty || secondNumber.isEmpty) {
+      showAlertDialog('Error', 'Please enter values in both fields.');
+      return;
+    }
+
+    if (!_isInteger(firstNumber) || !_isInteger(secondNumber)) {
+      showAlertDialog('Error', 'Please enter integer values only.');
+      return;
+    }
+
+    // Perform calculation here using the selected operation and the entered numbers
+  }
+
+  // using this boolean in the method above
+  bool _isInteger(String value) {
+    if (value.isEmpty) return false;
+
+    final number = int.tryParse(value);
+
+    return number != null;
+  }
+
+
+  // make the alert dialogue unavoidabale
+  void showAlertDialog(String title, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Dialog cannot be dismissed by tapping outside or pressing the back button
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -39,7 +92,8 @@ class CalculePagerState extends State<Calculepage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const TextField(
+                  TextField(
+                    controller: firstNumberController,
                     decoration:
                         InputDecoration(hintText: "Enter the first number"),
                   ),
@@ -61,12 +115,13 @@ class CalculePagerState extends State<Calculepage> {
                     onChanged: (value) => setSelectedRadioValue(value!),
                     title: Text('/'),
                   ),
-                  const TextField(
+                  TextField(
+                    controller: secondNumberController,
                     decoration:
-                        InputDecoration(hintText: "Enter the first number"),
+                        InputDecoration(hintText: "Enter the second number"),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: calculate,
                     child: Text("Calculer"),
                     style: ButtonStyle(
                       backgroundColor:
