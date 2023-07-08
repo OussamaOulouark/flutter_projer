@@ -12,6 +12,7 @@ class CalculePagerState extends State<Calculepage> {
   late int selectedRadioValue;
   TextEditingController firstNumberController = TextEditingController();
   TextEditingController secondNumberController = TextEditingController();
+  String operationResult = '';
 
   @override
   void initState() {
@@ -24,7 +25,6 @@ class CalculePagerState extends State<Calculepage> {
       selectedRadioValue = value;
     });
   }
-
 
   bool _isInteger(String value) {
     if (value.isEmpty) return false;
@@ -73,7 +73,8 @@ class CalculePagerState extends State<Calculepage> {
                 children: [
                   TextField(
                     controller: firstNumberController,
-                    decoration: InputDecoration(hintText: "Enter the first number"),
+                    decoration:
+                        InputDecoration(hintText: "Enter the first number"),
                   ),
                   RadioListTile(
                     value: 1,
@@ -95,7 +96,8 @@ class CalculePagerState extends State<Calculepage> {
                   ),
                   TextField(
                     controller: secondNumberController,
-                    decoration: InputDecoration(hintText: "Enter the second number"),
+                    decoration:
+                        InputDecoration(hintText: "Enter the second number"),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -103,26 +105,65 @@ class CalculePagerState extends State<Calculepage> {
                       String secondNumber = secondNumberController.text;
 
                       if (firstNumber.isEmpty || secondNumber.isEmpty) {
-                        showAlertDialog('Error', 'fields are empty try again!!!');
+                        showAlertDialog(
+                            'Error', 'fields are empty try again!!!');
                         return;
                       }
 
-                      if (!_isInteger(firstNumber) || !_isInteger(secondNumber)) {
+                      if (!_isInteger(firstNumber) ||
+                          !_isInteger(secondNumber)) {
                         showAlertDialog('Error', 'Sorry only Integers ');
                         return;
+                      }
+                      int num1 = int.parse(firstNumber);
+                      int num2 = int.parse(secondNumber);
+
+                      switch (selectedRadioValue) {
+                        case 1: // Addition
+                          operationResult = (num1 + num2).toString();
+                          break;
+                        case 2: // Subtraction
+                          operationResult = (num1 - num2).toString();
+                          break;
+                        case 3: // Division
+                          if (num2 == 0) {
+                            showAlertDialog('Error', 'Cannot divide by zero.');
+                            return;
+                          }
+                          operationResult = (num1 / num2).toString();
+                          break;
+                      }
+                      String getOperationText(int selectedRadioValue) {
+                        switch (selectedRadioValue) {
+                          case 1:
+                            return '+';
+                          case 2:
+                            return '-';
+                          case 3:
+                            return '/';
+                          default:
+                            return '';
+                        }
                       }
 
                       // Perform calculation here using the selected operation and the entered numbers
 
                       // Navigate to ResultPage
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ResultPage()),
-                      );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResultPage(
+                                    firstNumber: firstNumber,
+                                    secondNumber: secondNumber,
+                                    operationResult: operationResult,
+                                    operationText:
+                                        getOperationText(selectedRadioValue),
+                                  )));
                     },
                     child: Text("Calculer"),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.cyan),
                     ),
                   ),
                 ],
