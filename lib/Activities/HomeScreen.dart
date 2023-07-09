@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'Calculepage.dart';
+import 'ListPage.dart';
 
 
 
@@ -46,13 +47,16 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        width: 80,
+                        width: 100,
                       ),
                       GestureDetector(
                         onTap: () {
-                          print("hello");
+                          // Navigate to the ListPage
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => ListPage()),
+                          );
                         },
-                        child: const Icon(Icons.info , color: Colors.blue),
+                        child: const Icon(Icons.info, color: Colors.blue),
           )
                     ],
                   ),
